@@ -29,13 +29,42 @@ window.findNRooksSolution = function(n) {
 };
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
+/*let deepCopy = function(arr) {
+  if (arr.length === 1) {
+    return [].concat(arr);
+  }
+  let copiedArr = [];
+  for (let i = 0; i < arr.length; i++) {
+    copiedArr.push([]);
+    for (let j = 0; j < arr.length; j++) {
+      copiedArr[i].push(arr[i][j]);
+    }
+  }
+  return copiedArr;
+};*/
+
 window.countNRooksSolutions = function(n) {
-  var solutionCount = undefined; //fixme
-  //have solutions array of final boards
+  var solutionCount = 0;
+  var boardObj = new Board({n: n});
 
-  //inner recursion that pushes final boards to array
+  var inner = function(board, row) {
+    for (let i = 0; i < n; i++) {
+      boardObj.togglePiece(row, i);
+      if (!boardObj.hasColConflictAt(i)) {
+        if (row >= n - 1) {
+          solutionCount++;
+          boardObj.togglePiece(row, i);
+          return;
+        }
+        inner(board, row + 1);
+      }
+      boardObj.togglePiece(row, i);
+    }
+  };
 
-  //test each board with hasAnyRookConflict and count correct boards
+  inner(boardObj, 0);
+
+
 
   console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
   return solutionCount;

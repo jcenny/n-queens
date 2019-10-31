@@ -62,7 +62,7 @@
     },
 
 
-/*
+    /*
          _             _     _
      ___| |_ __ _ _ __| |_  | |__   ___ _ __ ___ _
     / __| __/ _` | '__| __| | '_ \ / _ \ '__/ _ (_)
@@ -151,7 +151,7 @@
           return true;
         }
         colIndex++;
-        if (colIndex === board.length) {
+        if (colIndex >= board.length) {
           return false;
         }
       }
@@ -179,12 +179,38 @@
     //
     // test if a specific minor diagonal on this board contains a conflict
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+      var board = this.rows();
+      var total = 0;
+      var colIndex = minorDiagonalColumnIndexAtFirstRow;
+
+      for (let i = 0; i < board.length; i++) {
+        if (colIndex >= board.length) {
+          colIndex--;
+          continue;
+        }
+        total += board[i][colIndex];
+        if (total > 1) {
+          return true;
+        }
+        colIndex--;
+        if (colIndex < 0) {
+          return false;
+        }
+      }
+      return false;
     },
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
-      return false; // fixme
+      var board = this.rows();
+      var upperIndex = this._getFirstRowColumnIndexForMinorDiagonalOn(board.length - 2, board.length - 1);
+
+      for (var i = 1; i <= upperIndex; i++) {
+        if (this.hasMinorDiagonalConflictAt(i) === true) {
+          return true;
+        }
+      }
+      return false;
     }
 
     /*--------------------  End of Helper Functions  ---------------------*/
